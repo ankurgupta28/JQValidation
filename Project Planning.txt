@@ -1,0 +1,24 @@
+--Validation Type
+
+Required
+Number
+String
+Min
+Max
+Length
+Email
+Website
+Date
+SmallDate
+Phone
+Zipcode
+
+
+--Attribute Name
+
+data-jqv-required = 'Y'
+
+
+--Design Patern
+
+Moduler/SelfInvoking

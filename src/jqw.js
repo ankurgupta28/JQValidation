@@ -45,10 +45,30 @@
                 if (typeof typeVal !== typeof undefined && typeVal !== false) {
                     switch (typeVal) {
                         case "number":
+                        case "decimal":
                             if ($.isNumeric($(element).val().trim()) === false) {
                                alert("Only number allowed in " + element.id);
+                               return false;
                             }
-
+                            break;
+                        case "decimalonly":
+                            if($.isNumeric($(element).val().trim())==false)
+                            {
+                                alert("Only decimal number allowed in " + element.id);
+                                return false;
+                            }
+                            else {
+                                    let regex = /./igm,
+                                    count = $(element).val().trim().match(regex),
+                                    count = (count) ? count.length : 0;
+                                    if(count != 1)
+                                    {
+                                        alert("Only decimal number allowed in " + element.id);
+                                        return false;
+                                    }
+                                    
+                            }  
+                        break;
                     }
                 }
 

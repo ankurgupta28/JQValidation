@@ -1,5 +1,6 @@
 // jQueryValidations Library 
 // Alias Name : jqw
+// Design Pattern : Revealing Module Pattern
 
 (function(window) {
     // We can enable the strict mode commenting the following line  

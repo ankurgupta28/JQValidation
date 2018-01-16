@@ -26,25 +26,34 @@
 
         // function to validate complete form
         function _validate(formName) {
-			$("#"+formName + " :input").each(function(){
-				let element = this;
-				debugger;
-				let attr = $(this).attr('data-jqv-required');
-				if (typeof attr !== typeof undefined && attr !== false) {
-					if(attr.toUpperCase().trim() == 'Y')
-					{
-						if($(element).val().trim() == '')
-						{
-							alert(element.id + " Invalid");
-						}	
-					
-					}
-				}
-				
-				
-				
-				});
-			//logic to validate form
+            $("#" + formName + " :input").each(function() {
+                let element = this;
+                debugger;
+
+                let reqVal = $(this).data('jqv-required');
+                if (typeof reqVal !== typeof undefined && reqVal !== false) {
+                    if (reqVal.toUpperCase().trim() == 'Y') {
+                        if ($(element).val().trim() == '') {
+                            alert(element.id + " Invalid");
+                            return false;
+                        }
+
+                    }
+                }
+
+                let typeVal = $(this).data('jqv-type');
+                if (typeof typeVal !== typeof undefined && typeVal !== false) {
+                    switch (typeVal) {
+                        case "number":
+                            if ($.isNumeric($(element).val().trim()) === false) {
+                               alert("Only number allowed in " + element.id);
+                            }
+
+                    }
+                }
+
+            });
+            //logic to validate form
             return true;
         };
 
@@ -55,4 +64,4 @@
     if (typeof(window.jqw) === 'undefined') {
         window.jqw = jqw();
     }
-})(window); // We send the window variable withing our function
+})(window); // We send the window variable withing our functio()

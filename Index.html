@@ -24,11 +24,15 @@
         <form id="frm">
             <div class="form-group">
                 <label for="fname">First Name:</label>
-                <input type="text" class="form-control" data-jqv-required = 'Y' id="fname" name="fname">
+                <input type="text" class="form-control" data-jqv-required='Y' id="fname" name="fname">
             </div>
             <div class="form-group">
                 <label for="lname">Last Name:</label>
-                <input type="text" class="form-control" data-jqv-required = 'Y' id="lname" name="lname">
+                <input type="text" class="form-control" data-jqv-required='Y' id="lname" name="lname">
+            </div>
+            <div class="form-group">
+                <label for="email">Age:</label>
+                <input type="text" class="form-control" id="age" name="Age" data-jqv-type='number'>
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
@@ -46,14 +50,11 @@
             <button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
         </form>
     </div>
-<script>
-
-$("#btnSubmit").click(function(){
-jqw.validate('frm');
-}
-);
-
-</script>
+    <script>
+        $("#btnSubmit").click(function() {
+            jqw.validate('frm');
+        });
+    </script>
 
 </body>
 

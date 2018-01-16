@@ -9,11 +9,7 @@
 
     // This function will contain all our code
     function jqw() {
-        // This variable will be accessible to the end user.
-        var _jqwObject = {
-            validate: _validate,
-            version: '1.0',
-        };
+
 
         // This variable will be inaccessible to the end user, this can be used in the scope of library.
         var defaults = {
@@ -23,52 +19,60 @@
                 email: 'email'
             },
         };
+        //Private function to check if element is required
+        let _isRequired = function(element) {
+            let value = $(element).data('jqv-required');
+            return value && value.toString().toUpperCase() === "Y";
+        }
+
+        //Private function to get caption of the field
+        let _getCaption = function(element) {
+            let label = $("label[for='" + $(element).attr('id') + "']");
+            if (label.length == 1) return label.text().trim().replace(':', '');
+            return $(element).attr('id');
+        }
 
         // function to validate complete form
-        function _validate(formName) {
-            $("#" + formName + " :input").each(function() {
-                let element = this;
+        let _validate = function(formName) {
+            $("#" + formName + " *").filter(':input').not("input[type=hidden]").each(function() {
                 debugger;
+                let element = this;
+                let elementId = $(element).attr('id');
+                let elementVal = $(element).val().trim();
+                let elementCaption = _getCaption(element);
+                let elementIsRequired = _isRequired(element);
 
-                let reqVal = $(this).data('jqv-required');
-                if (typeof reqVal !== typeof undefined && reqVal !== false) {
-                    if (reqVal.toUpperCase().trim() == 'Y') {
-                        if ($(element).val().trim() == '') {
-                            alert(element.id + " Invalid");
-                            return false;
-                        }
-
-                    }
+                if ((elementIsRequired) && (elementVal == '')) {
+                    alert(elementCaption + " Is Required");
+                    return false;
                 }
 
-                let typeVal = $(this).data('jqv-type');
+
+                let typeVal = $(element).data('jqv-type');
                 if (typeof typeVal !== typeof undefined && typeVal !== false) {
                     switch (typeVal) {
                         case "number":
                         case "decimal":
                             if ($.isNumeric($(element).val().trim()) === false) {
-                               alert("Only number allowed in " + element.id);
-                               return false;
+                                alert("Only number allowed in " + element.id);
+                                return false;
                             }
                             break;
                         case "decimalonly":
-                            if($.isNumeric($(element).val().trim())==false)
-                            {
+                            if ($.isNumeric($(element).val().trim()) == false) {
                                 alert("Only decimal number allowed in " + element.id);
                                 return false;
-                            }
-                            else {
-                                    let regex = /./igm,
+                            } else {
+                                let regex = /./igm,
                                     count = $(element).val().trim().match(regex),
                                     count = (count) ? count.length : 0;
-                                    if(count != 1)
-                                    {
-                                        alert("Only decimal number allowed in " + element.id);
-                                        return false;
-                                    }
-                                    
-                            }  
-                        break;
+                                if (count != 1) {
+                                    alert("Only decimal number allowed in " + element.id);
+                                    return false;
+                                }
+
+                            }
+                            break;
                     }
                 }
 
@@ -76,7 +80,11 @@
             //logic to validate form
             return true;
         };
-
+        // This variable will be accessible to the end user.
+        var _jqwObject = {
+            validate: _validate,
+            version: '1.0',
+        };
         return _jqwObject;
     }
 

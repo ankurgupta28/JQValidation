@@ -18,9 +18,10 @@ Zipcode
 --Attribute Name
 
 data-jqv-required = 'Y'
-data-jqv-type = 'number'
-data-jqv-type = 'decimal'
+data-jqv-type = 'number' | 'decimal'
 data-jqv-type = 'decimalonly'
+data-jqv-min = '1'
+data-jqv-max = '10'
 
 --Design Patern
 

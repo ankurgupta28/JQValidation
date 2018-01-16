@@ -47,11 +47,12 @@
               <input class="form-check-input" type="checkbox" name="remember"> Remember me
             </label>
             </div>
-            <button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+            <button type="button" id="btnSubmit" class="btn btn-primary">Submit</button>
         </form>
     </div>
     <script>
-        $("#btnSubmit").click(function() {
+        $("#btnSubmit").click(function(e) {
+            e.preventDefault();
             jqw.validate('frm');
         });
     </script>

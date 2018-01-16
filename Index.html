@@ -24,11 +24,11 @@
         <form id="frm">
             <div class="form-group">
                 <label for="fname">First Name:</label>
-                <input type="text" class="form-control" id="fname" name="fname">
+                <input type="text" class="form-control" data-jqv-required = 'Y' id="fname" name="fname">
             </div>
             <div class="form-group">
                 <label for="lname">Last Name:</label>
-                <input type="text" class="form-control" id="lname" name="lname">
+                <input type="text" class="form-control" data-jqv-required = 'Y' id="lname" name="lname">
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
@@ -43,10 +43,17 @@
               <input class="form-check-input" type="checkbox" name="remember"> Remember me
             </label>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
         </form>
     </div>
+<script>
 
+$("#btnSubmit").click(function(){
+jqw.validate('frm');
+}
+);
+
+</script>
 
 </body>
 

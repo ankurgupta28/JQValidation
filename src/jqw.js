@@ -25,7 +25,18 @@
 
         // function to validate complete form
         function _validate(formName) {
-            //logic to validate form
+			$("#"+formName + " :input").each(function(){
+				let element = this;
+				debugger;
+				let attr = $(this).attr('data-jqv-required');
+				if (typeof attr !== typeof undefined && attr !== false) {
+					alert(element.id);
+				}
+				
+				
+				
+				});
+			//logic to validate form
             return true;
         };
 

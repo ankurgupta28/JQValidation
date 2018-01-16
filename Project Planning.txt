@@ -1,7 +1,8 @@
 --Validation Type
 
-Required
-Number
+Required            Done
+Number              Done
+Only Number         Done
 String
 Min
 Max
@@ -17,7 +18,9 @@ Zipcode
 --Attribute Name
 
 data-jqv-required = 'Y'
-
+data-jqv-type = 'number'
+data-jqv-type = 'decimal'
+data-jqv-type = 'decimalonly'
 
 --Design Patern
 

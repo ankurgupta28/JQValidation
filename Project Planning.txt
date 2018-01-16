@@ -3,7 +3,7 @@
 Required            Done
 Number              Done
 Only Number         Done
-String
+Stringonly
 Min
 Max
 Length
@@ -20,6 +20,7 @@ Zipcode
 data-jqv-required = 'Y'
 data-jqv-type = 'number' | 'decimal'
 data-jqv-type = 'decimalonly'
+data-jqv-type = 'stringonly'
 data-jqv-min = '1'
 data-jqv-max = '10'
 

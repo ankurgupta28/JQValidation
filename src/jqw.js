@@ -32,6 +32,10 @@
             return $(element).attr('id');
         }
 
+        let _hasNumber = function (myString) {
+            return /\d/.test(myString);
+          }
+
         // function to validate complete form
         let _validate = function(formName) {
             $("#" + formName + " *").filter(':input').not("input[type=hidden]").each(function() {
@@ -54,25 +58,30 @@
                         case "number":
                         case "decimal":
                             if ($.isNumeric($(element).val().trim()) === false) {
-                                alert("Only number allowed in " + element.id);
+                                alert("Only number allowed in " + elementCaption);
                                 return false;
                             }
                             break;
                         case "decimalonly":
                             if ($.isNumeric($(element).val().trim()) == false) {
-                                alert("Only decimal number allowed in " + element.id);
+                                alert("Only decimal number allowed in " + elementCaption);
                                 return false;
                             } else {
                                 let regex = /./igm,
                                     count = $(element).val().trim().match(regex),
                                     count = (count) ? count.length : 0;
                                 if (count != 1) {
-                                    alert("Only decimal number allowed in " + element.id);
+                                    alert("Only decimal number allowed in " + elementCaption);
                                     return false;
                                 }
 
                             }
                             break;
+                        case "stringonly":
+                            if(!_hasNumber($(element).val().trim()))
+                            {
+                                alert("Numbers not allowed " + elementCaption);
+                            }
                     }
                 }
 

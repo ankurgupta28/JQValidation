@@ -30,7 +30,14 @@
 				debugger;
 				let attr = $(this).attr('data-jqv-required');
 				if (typeof attr !== typeof undefined && attr !== false) {
-					alert(element.id);
+					if(attr.toUpperCase().trim() == 'Y')
+					{
+						if($(element).val().trim() == '')
+						{
+							alert(element.id + " Invalid");
+						}	
+					
+					}
 				}
 				
 				

@@ -32,10 +32,15 @@
             return $(element).attr('id');
         }
 
+        //Private function to check string has number or not.
         let _hasNumber = function (myString) {
             return /\d/.test(myString);
           }
 
+        let _hasEmail = function (myString) 
+        {
+         return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(myString);
+        }  
         // function to validate complete form
         let _validate = function(formName) {
             $("#" + formName + " *").filter(':input').not("input[type=hidden]").each(function() {
@@ -74,13 +79,17 @@
                                     alert("Only decimal number allowed in " + elementCaption);
                                     return false;
                                 }
-
                             }
                             break;
                         case "stringonly":
                             if(!_hasNumber($(element).val().trim()))
                             {
                                 alert("Numbers not allowed " + elementCaption);
+                            }
+                        case "email":
+                            if(!_hasEmail($(element).val().trim()))
+                            {
+                                alert("You have entered an invalid email address! " + elementCaption)
                             }
                     }
                 }

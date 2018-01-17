@@ -10,7 +10,6 @@
     // This function will contain all our code
     function jqw() {
 
-
         // This variable will be inaccessible to the end user, this can be used in the scope of library.
         var defaults = {
             dataType: {
@@ -32,6 +31,18 @@
             return $(element).attr('id');
         }
 
+        //Private function to get caption of the field
+        let _validateEmail = function(element) {
+            let label = $("label[for='" + $(element).attr('id') + "']");
+            if (label.length == 1) return label.text().trim().replace(':', '');
+            return $(element).attr('id');
+        }
+
+        //Private function to show message or error
+        let _showMessage = function(message) {
+            alert(message);
+        }
+
         // function to validate complete form
         let _validate = function(formName) {
             $("#" + formName + " *").filter(':input').not("input[type=hidden]").each(function() {
@@ -43,7 +54,7 @@
                 let elementIsRequired = _isRequired(element);
 
                 if ((elementIsRequired) && (elementVal == '')) {
-                    alert(elementCaption + " Is Required");
+                    _showMessage(elementCaption + " Is Required");
                     return false;
                 }
 
@@ -51,23 +62,29 @@
                 let typeVal = $(element).data('jqv-type');
                 if (typeof typeVal !== typeof undefined && typeVal !== false) {
                     switch (typeVal) {
+                        case "email":
+                            if (elementVal != "") {
+                                if (!ValidateEmail(email)) {}
+                            }
+                            break;
                         case "number":
+                            break;
                         case "decimal":
                             if ($.isNumeric($(element).val().trim()) === false) {
-                                alert("Only number allowed in " + element.id);
+                                _showMessage("Only number allowed in " + element.id);
                                 return false;
                             }
                             break;
                         case "decimalonly":
                             if ($.isNumeric($(element).val().trim()) == false) {
-                                alert("Only decimal number allowed in " + element.id);
+                                _showMessage("Only decimal number allowed in " + element.id);
                                 return false;
                             } else {
                                 let regex = /./igm,
                                     count = $(element).val().trim().match(regex),
                                     count = (count) ? count.length : 0;
                                 if (count != 1) {
-                                    alert("Only decimal number allowed in " + element.id);
+                                    _showMessage("Only decimal number allowed in " + element.id);
                                     return false;
                                 }
 

@@ -32,7 +32,7 @@
         }
 
         //Private function to get caption of the field
-        let _validateEmail = function(element) {
+        let _isEmail = function(element) {
             let label = $("label[for='" + $(element).attr('id') + "']");
             if (label.length == 1) return label.text().trim().replace(':', '');
             return $(element).attr('id');
@@ -41,6 +41,10 @@
         //Private function to show message or error
         let _showMessage = function(message) {
             alert(message);
+        }
+
+        let _hasNumber = function(myString) {
+            return /\d/.test(myString);
         }
 
         // function to validate complete form
@@ -64,32 +68,38 @@
                     switch (typeVal) {
                         case "email":
                             if (elementVal != "") {
-                                if (!ValidateEmail(email)) {}
+                                if (!_isEmail(email)) {
+                                    _showMessage("Envalid " + elementCaption);
+                                }
                             }
                             break;
                         case "number":
                             break;
                         case "decimal":
                             if ($.isNumeric($(element).val().trim()) === false) {
-                                _showMessage("Only number allowed in " + element.id);
+                                _showMessage("Only number allowed in " + elementCaption);
                                 return false;
                             }
                             break;
                         case "decimalonly":
                             if ($.isNumeric($(element).val().trim()) == false) {
-                                _showMessage("Only decimal number allowed in " + element.id);
+                                _showMessage("Only decimal number allowed in " + elementCaption);
                                 return false;
                             } else {
                                 let regex = /./igm,
                                     count = $(element).val().trim().match(regex),
                                     count = (count) ? count.length : 0;
                                 if (count != 1) {
-                                    _showMessage("Only decimal number allowed in " + element.id);
+                                    _showMessage("Only decimal number allowed in " + elementCaption);
                                     return false;
                                 }
 
                             }
                             break;
+                        case "stringonly":
+                            if (!_hasNumber($(element).val().trim())) {
+                                _showMessage("Numbers not allowed " + elementCaption);
+                            }
                     }
                 }
 

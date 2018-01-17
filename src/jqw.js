@@ -31,23 +31,20 @@
             return $(element).attr('id');
         }
 
-        //Private function to get caption of the field
-        let _isEmail = function(element) {
-            let label = $("label[for='" + $(element).attr('id') + "']");
-            if (label.length == 1) return label.text().trim().replace(':', '');
-            return $(element).attr('id');
-        }
-
         //Private function to show message or error
         let _showMessage = function(message) {
             alert(message);
         }
 
+        //Private function to check string has number or not.
         let _hasNumber = function(myString) {
             return /\d/.test(myString);
         }
 
-        // function to validate complete form
+        let _hasEmail = function(myString) {
+                return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(myString);
+            }
+            // function to validate complete form
         let _validate = function(formName) {
             $("#" + formName + " *").filter(':input').not("input[type=hidden]").each(function() {
                 debugger;
@@ -66,13 +63,6 @@
                 let typeVal = $(element).data('jqv-type');
                 if (typeof typeVal !== typeof undefined && typeVal !== false) {
                     switch (typeVal) {
-                        case "email":
-                            if (elementVal != "") {
-                                if (!_isEmail(email)) {
-                                    _showMessage("Envalid " + elementCaption);
-                                }
-                            }
-                            break;
                         case "number":
                             break;
                         case "decimal":
@@ -93,12 +83,15 @@
                                     _showMessage("Only decimal number allowed in " + elementCaption);
                                     return false;
                                 }
-
                             }
                             break;
                         case "stringonly":
                             if (!_hasNumber($(element).val().trim())) {
                                 _showMessage("Numbers not allowed " + elementCaption);
+                            }
+                        case "email":
+                            if (!_hasEmail($(element).val().trim())) {
+                                _showMessage("You have entered an invalid email address! " + elementCaption)
                             }
                     }
                 }

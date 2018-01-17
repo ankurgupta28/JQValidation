@@ -3,11 +3,11 @@
 Required            Done
 Number              Done
 Only Number         Done
-Stringonly
+Stringonly          Done
 Min
 Max
 Length
-Email
+Email               Done
 Website
 Date
 SmallDate
@@ -23,7 +23,7 @@ data-jqv-type = 'decimalonly'
 data-jqv-type = 'stringonly'
 data-jqv-min = '1'
 data-jqv-max = '10'
-
+data-jqv-type = 'email'
 --Design Patern
 
 Moduler/SelfInvoking

@@ -21,34 +21,47 @@
 
     <div class="container-fluid">
         <h2>Entry form</h2>
+
         <form id="frm">
-            <div class="form-group">
-                <label for="fname">First Name:</label>
-                <input type="text" class="form-control" data-jqv-required='Y' id="fname" name="fname">
+            <div class="form-row">
+                <div class="col">
+                    <label for="fname">First Name:</label>
+                    <input type="text" class="form-control " data-jqv-required='Y' id="fname" name="fname">
+                </div>
+                <div class="col">
+                    <label for="lname">Last Name:</label>
+                    <input type="text" class="form-control " data-jqv-required='Y' id="lname" name="lname">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <label for="age">Age:</label>
+                    <input type="text" class="form-control " id="age" name="Age" data-jqv-type='number'>
+                </div>
+                <div class="col">
+                    <label for="salary">Salary:</label>
+                    <input type="text" class="form-control " id="salary" name="salary" data-jqv-type='decimal'>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control " id="email" name="email">
+                </div>
+                <div class="col">
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control " id="password" name="password">
+                </div>
             </div>
             <div class="form-group">
-                <label for="lname">Last Name:</label>
-                <input type="text" class="form-control" data-jqv-required='Y' id="lname" name="lname">
-            </div>
-            <div class="form-group">
-                <label for="email">Age:</label>
-                <input type="text" class="form-control" id="age" name="Age" data-jqv-type='number'>
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" name="email">
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" class="form-control" id="password" name="password">
-            </div>
-            <div class="form-check">
                 <label class="form-check-label">
-              <input class="form-check-input" type="checkbox" name="remember"> Remember me
-            </label>
+                        <input class="form-check-input" type="checkbox" name="remember"> Remember me
+                   </label>
             </div>
             <button type="button" id="btnSubmit" class="btn btn-primary">Submit</button>
+
         </form>
+
     </div>
     <script>
         $("#btnSubmit").click(function(e) {

@@ -5,19 +5,24 @@
 (function(window) {
     // We can enable the strict mode commenting the following line  
     // 'use strict';
-
+    class error {
+        constructor(id, msg) {
+            this.eleId = id;
+            this.errMessage = msg;
+        }
+    }
 
     // This function will contain all our code
     function jqw() {
 
         // This variable will be inaccessible to the end user, this can be used in the scope of library.
         var defaults = {
-            dataType: {
-                number: 'number',
-                date: 'date',
-                email: 'email'
-            },
+            errorClass: 'is-invalid',
+            errorMessageTemplate: '<div class="invalid-feedback">{0}</div>',
+            successClass: 'is-valid',
         };
+        var errorList = [];
+
         //Private function to check if element is required
         let _isRequired = function(element) {
             let value = $(element).data('jqv-required');
@@ -32,8 +37,12 @@
         }
 
         //Private function to show message or error
-        let _showMessage = function(message) {
-            alert(message);
+        let _showMessage = function() {
+            console.log(errorList);
+            errorList.forEach(element => {
+                $("#" + element.eleId).addClass(defaults.errorClass);
+                $("#" + element.eleId).after(defaults.errorMessageTemplate.replace('{0}', element.errMessage));
+            });
         }
 
         //Private function to check string has number or not.
@@ -42,12 +51,13 @@
         }
 
         let _hasEmail = function(myString) {
-                return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(myString);
-            }
-            // function to validate complete form
+            return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(myString);
+        }
+
+        // function to validate complete form
         let _validate = function(formName) {
             $("#" + formName + " *").filter(':input').not("input[type=hidden]").each(function() {
-                debugger;
+
                 let element = this;
                 let elementId = $(element).attr('id');
                 let elementVal = $(element).val().trim();
@@ -55,8 +65,8 @@
                 let elementIsRequired = _isRequired(element);
 
                 if ((elementIsRequired) && (elementVal == '')) {
-                    _showMessage(elementCaption + " Is Required");
-                    return false;
+                    errorList.push(new error(elementId, elementCaption + " Is Required"));
+                    //return false;
                 }
 
 
@@ -67,38 +77,39 @@
                             break;
                         case "decimal":
                             if ($.isNumeric($(element).val().trim()) === false) {
-                                _showMessage("Only number allowed in " + elementCaption);
-                                return false;
+                                errorList.push(new error(elementId, "Only number allowed in " + elementCaption));
                             }
                             break;
                         case "decimalonly":
                             if ($.isNumeric($(element).val().trim()) == false) {
-                                _showMessage("Only decimal number allowed in " + elementCaption);
-                                return false;
+                                errorList.push(new error(elementId, "Only decimal number allowed in " + elementCaption));
                             } else {
                                 let regex = /./igm,
-                                    count = $(element).val().trim().match(regex),
-                                    count = (count) ? count.length : 0;
+                                    count = $(element).val().trim().match(regex);
+
+                                count = (count) ? count.length : 0;
                                 if (count != 1) {
-                                    _showMessage("Only decimal number allowed in " + elementCaption);
-                                    return false;
+                                    errorList.push(new error(elementId, "Only decimal number allowed in " + elementCaption));
                                 }
                             }
                             break;
                         case "stringonly":
                             if (!_hasNumber($(element).val().trim())) {
-                                _showMessage("Numbers not allowed " + elementCaption);
+                                errorList.push(new error(elementId, "Numbers not allowed " + elementCaption));
                             }
                         case "email":
                             if (!_hasEmail($(element).val().trim())) {
-                                _showMessage("You have entered an invalid email address! " + elementCaption)
+                                errorList.push(new error(elementId, "You have entered an invalid email address! " + elementCaption));
                             }
                     }
                 }
 
             });
-            //logic to validate form
-            return true;
+            if (errorList.length > 0) {
+                _showMessage();
+                return false;
+            } else
+                return true;
         };
         // This variable will be accessible to the end user.
         var _jqwObject = {

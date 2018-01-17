@@ -22,7 +22,7 @@
             successClass: 'is-valid',
         };
         var errorList = [];
-
+        
         //Private function to check if element is required
         let _isRequired = function(element) {
             let value = $(element).data('jqv-required');
@@ -38,6 +38,8 @@
 
         //Private function to show message or error
         let _showMessage = function() {
+            $("input").removeClass("is-invalid")
+            $(".invalid-feedback").hide();
             console.log(errorList);
             errorList.forEach(element => {
                 $("#" + element.eleId).addClass(defaults.errorClass);
@@ -56,6 +58,7 @@
 
         // function to validate complete form
         let _validate = function(formName) {
+            errorList = [];
             $("#" + formName + " *").filter(':input').not("input[type=hidden]").each(function() {
 
                 let element = this;
@@ -74,7 +77,6 @@
                 if (typeof typeVal !== typeof undefined && typeVal !== false) {
                     switch (typeVal) {
                         case "number":
-                            break;
                         case "decimal":
                             if ($.isNumeric($(element).val().trim()) === false) {
                                 errorList.push(new error(elementId, "Only number allowed in " + elementCaption));

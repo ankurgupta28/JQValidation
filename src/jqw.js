@@ -42,6 +42,8 @@
             $(".invalid-feedback").hide();
             console.log(errorList);
             errorList.forEach(element => {
+                $("#" + element.eleId).removeClass(defaults.errorClass);
+                $("#" + element.eleId).next().remove('.invalid-feedback');
                 $("#" + element.eleId).addClass(defaults.errorClass);
                 $("#" + element.eleId).after(defaults.errorMessageTemplate.replace('{0}', element.errMessage));
             });

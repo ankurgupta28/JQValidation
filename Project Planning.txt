@@ -8,7 +8,7 @@ Min
 Max
 Length
 Email               Done
-Website
+Website             Done
 Date
 SmallDate
 Phone
@@ -24,6 +24,7 @@ data-jqv-type = 'stringonly'
 data-jqv-min = '1'
 data-jqv-max = '10'
 data-jqv-type = 'email'
+data-jqv-type = 'url'
 --Design Patern
 
 Moduler/SelfInvoking

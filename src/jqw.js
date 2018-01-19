@@ -40,6 +40,7 @@
         let _showMessage = function(formName) {
             $("#" + formName + " *").removeClass("is-invalid").remove('.invalid-feedback');
             errorList.forEach(element => {
+                $("#" + element.eleId).next().hasClass('invalid-feedback') ? $("#" + element.eleId).next().remove() : null;
                 $("#" + element.eleId).removeClass(defaults.successClass).addClass(defaults.errorClass);
                 $("#" + element.eleId).after(defaults.errorMessageTemplate.replace('{0}', element.errMessage));
             });
@@ -58,60 +59,10 @@
         }
 
         // function to validate complete form
-        let _validate = function(formName) {
+        let _validateForm = function(formName) {
             errorList = [];
             $("#" + formName + " *").filter(':input').not("input[type=hidden]").each(function() {
-
-                let element = this;
-                let elementId = $(element).attr('id');
-                let elementVal = $(element).val().trim();
-                let elementCaption = _getCaption(element);
-                let elementIsRequired = _isRequired(element);
-
-                if ((elementIsRequired) && (elementVal == '')) {
-                    errorList.push(new error(elementId, elementCaption + " Is Required"));
-                }
-
-                let typeVal = $(element).data('jqv-type');
-                if (typeof typeVal !== typeof undefined && typeVal !== false) {
-                    switch (typeVal) {
-                        case "number":
-                        case "decimal":
-                            if ($.isNumeric($(element).val().trim()) === false) {
-                                errorList.push(new error(elementId, "Only number allowed in " + elementCaption));
-                            }
-                            break;
-                        case "decimalonly":
-                            if ($.isNumeric($(element).val().trim()) == false) {
-                                errorList.push(new error(elementId, "Only decimal number allowed in " + elementCaption));
-                            } else {
-                                let regex = /./igm,
-                                    count = $(element).val().trim().match(regex);
-
-                                count = (count) ? count.length : 0;
-                                if (count != 1) {
-                                    errorList.push(new error(elementId, "Only decimal number allowed in " + elementCaption));
-                                }
-                            }
-                            break;
-                        case "stringonly":
-                            if (!_hasNumber($(element).val().trim())) {
-                                errorList.push(new error(elementId, "Numbers not allowed " + elementCaption));
-                            }
-                            break;
-                        case "email":
-                            if (!_hasEmail($(element).val().trim())) {
-                                errorList.push(new error(elementId, "You have entered an invalid email address! " + elementCaption));
-                            }
-                            break;
-                        case "url":
-                            if (!_hasUrl($(element).val().trim())) {
-                                errorList.push(new error(elementId, "You have entered an invalid website address! " + elementCaption))
-                            }
-                            break;
-                    }
-                }
-
+                _validateElement(this, false);
             });
             if (errorList.length > 0) {
                 _showMessage(formName);
@@ -119,9 +70,71 @@
             } else
                 return true;
         };
+        let _validateElement = function(element, showError = true) {
+
+            let elementId = $(element).attr('id');
+            let elementVal = $(element).val().trim();
+            let elementCaption = _getCaption(element);
+            let elementIsRequired = _isRequired(element);
+
+            if ((elementIsRequired) && (elementVal == '')) {
+                errorList.push(new error(elementId, elementCaption + " Is Required"));
+            }
+
+            let typeVal = $(element).data('jqv-type');
+            if (typeof typeVal !== typeof undefined && typeVal !== false) {
+                switch (typeVal) {
+                    case "number":
+                    case "decimal":
+                        if ($.isNumeric($(element).val().trim()) === false) {
+                            errorList.push(new error(elementId, "Only number allowed in " + elementCaption));
+                        }
+                        break;
+                    case "decimalonly":
+                        if ($.isNumeric($(element).val().trim()) == false) {
+                            errorList.push(new error(elementId, "Only decimal number allowed in " + elementCaption));
+                        } else {
+                            let regex = /./igm,
+                                count = $(element).val().trim().match(regex);
+
+                            count = (count) ? count.length : 0;
+                            if (count != 1) {
+                                errorList.push(new error(elementId, "Only decimal number allowed in " + elementCaption));
+                            }
+                        }
+                        break;
+                    case "stringonly":
+                        if (!_hasNumber($(element).val().trim())) {
+                            errorList.push(new error(elementId, "Numbers not allowed " + elementCaption));
+                        }
+                        break;
+                    case "email":
+                        if (!_hasEmail($(element).val().trim())) {
+                            errorList.push(new error(elementId, "You have entered an invalid email address! " + elementCaption));
+                        }
+                        break;
+                    case "url":
+                        if (!_hasUrl($(element).val().trim())) {
+                            errorList.push(new error(elementId, "You have entered an invalid website address! " + elementCaption))
+                        }
+                        break;
+                }
+            }
+
+            if (showError) {
+                if (errorList.length > 0) {
+                    _showMessage(elementId);
+                    return false;
+                } else
+                    return true;
+            }
+        }
+
+
         // This variable will be accessible to the end user.
         var _jqwObject = {
-            validate: _validate,
+            validateForm: _validateForm,
+            validateElement: _validateElement,
             version: '1.0',
         };
         return _jqwObject;

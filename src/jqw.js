@@ -2,7 +2,7 @@
 // Alias Name : jqw
 // Design Pattern : Revealing Module Pattern
 
-(function (window) {
+(function(window) {
     // We can enable the strict mode commenting the following line  
     // 'use strict';
     class error {
@@ -24,47 +24,43 @@
         var errorList = [];
 
         //Private function to check if element is required
-        let _isRequired = function (element) {
+        let _isRequired = function(element) {
             let value = $(element).data('jqv-required');
             return value && value.toString().toUpperCase() === "Y";
         }
 
         //Private function to get caption of the field
-        let _getCaption = function (element) {
+        let _getCaption = function(element) {
             let label = $("label[for='" + $(element).attr('id') + "']");
             if (label.length == 1) return label.text().trim().replace(':', '');
             return $(element).attr('id');
         }
 
         //Private function to show message or error
-        let _showMessage = function () {
-            $("input").removeClass("is-invalid")
-            $(".invalid-feedback").hide();
-            console.log(errorList);
+        let _showMessage = function(formName) {
+            $("#" + formName + " *").removeClass("is-invalid").remove('.invalid-feedback');
             errorList.forEach(element => {
-                $("#" + element.eleId).removeClass(defaults.errorClass);
-                $("#" + element.eleId).next().remove('.invalid-feedback');
-                $("#" + element.eleId).addClass(defaults.errorClass);
+                $("#" + element.eleId).removeClass(defaults.successClass).addClass(defaults.errorClass);
                 $("#" + element.eleId).after(defaults.errorMessageTemplate.replace('{0}', element.errMessage));
             });
         }
 
         //Private function to check string has number or not.
-        let _hasNumber = function (myString) {
+        let _hasNumber = function(myString) {
             return /\d/.test(myString);
         }
 
-        let _hasEmail = function (myString) {
+        let _hasEmail = function(myString) {
             return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(myString);
         }
-        let _hasUrl = function (myString) {
+        let _hasUrl = function(myString) {
             return /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(myString);
         }
 
         // function to validate complete form
-        let _validate = function (formName) {
+        let _validate = function(formName) {
             errorList = [];
-            $("#" + formName + " *").filter(':input').not("input[type=hidden]").each(function () {
+            $("#" + formName + " *").filter(':input').not("input[type=hidden]").each(function() {
 
                 let element = this;
                 let elementId = $(element).attr('id');
@@ -74,9 +70,7 @@
 
                 if ((elementIsRequired) && (elementVal == '')) {
                     errorList.push(new error(elementId, elementCaption + " Is Required"));
-                    //return false;
                 }
-
 
                 let typeVal = $(element).data('jqv-type');
                 if (typeof typeVal !== typeof undefined && typeVal !== false) {
@@ -110,9 +104,9 @@
                                 errorList.push(new error(elementId, "You have entered an invalid email address! " + elementCaption));
                             }
                             break;
-                            case "url":
-                            if(!_hasUrl($(element).val().trim())){
-                                errorList.push(new error(elementId,"You have entered an invalid website address! " + elementCaption))
+                        case "url":
+                            if (!_hasUrl($(element).val().trim())) {
+                                errorList.push(new error(elementId, "You have entered an invalid website address! " + elementCaption))
                             }
                             break;
                     }
@@ -120,7 +114,7 @@
 
             });
             if (errorList.length > 0) {
-                _showMessage();
+                _showMessage(formName);
                 return false;
             } else
                 return true;
@@ -134,7 +128,7 @@
     }
 
     // We need that our library is globally accesible, so we save in the window with name 'jqw'
-    if (typeof (window.jqw) === 'undefined') {
+    if (typeof(window.jqw) === 'undefined') {
         window.jqw = jqw();
     }
 })(window); // We send the window variable withing our functio()

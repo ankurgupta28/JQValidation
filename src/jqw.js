@@ -1,5 +1,5 @@
 // jQueryValidations Library 
-// Alias Name : jqw
+// Alias Name : jqv
 // Design Pattern : Revealing Module Pattern
 
 (function(window) {
@@ -13,7 +13,7 @@
     }
 
     // This function will contain all our code
-    function jqw() {
+    function jqv() {
 
         // This variable will be inaccessible to the end user, this can be used in the scope of library.
         var defaults = {
@@ -47,14 +47,39 @@
         }
 
         //Private function to check string has number or not.
-        let _hasNumber = function(myString) {
+        let _isNumber = function(myString) {
             return /\d/.test(myString);
         }
 
-        let _hasEmail = function(myString) {
-            return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(myString);
+        //Private function to check email.
+        let _isEmail = function(myString) {
+            return /^.{1,}@.{2,}\..{2,}/.test(myString);
         }
-        let _hasUrl = function(myString) {
+
+        //Private function to check if input string as has only characters.
+        let _isString = function(myString) {
+            return /^[A-z]+$/.test(myString);
+        }
+
+        //Private function to check date is valid.
+        var _isDate = function(date) {
+            return (new Date(date) !== "Invalid Date" && !isNaN(new Date(date))) ? true : false;
+        }
+
+        //Private function to clear complete form
+        let _clearForm = function(formName) {
+            errorList = [];
+            $("#" + formName + " *").filter(':input').not("input[type=hidden]").each(function() {
+                let element = this;
+                $(element).removeClass("is-invalid");
+                $(element).next().hasClass('invalid-feedback') ? $(element).next().remove() : null;
+                $(element).val('');
+            });
+
+        };
+
+        //Private function to validate URL
+        let _isUrl = function(myString) {
             return /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(myString);
         }
 
@@ -74,8 +99,11 @@
 
             let elementId = $(element).attr('id');
             let elementVal = $(element).val().trim();
+            let elementValLength = elementVal.length;
             let elementCaption = _getCaption(element);
             let elementIsRequired = _isRequired(element);
+            let elementMinLength = $(element).data('jqv-min');
+            let elementMaxLength = $(element).data('jqv-max');
 
             if ((elementIsRequired) && (elementVal == '')) {
                 errorList.push(new error(elementId, elementCaption + " Is Required"));
@@ -85,9 +113,14 @@
             if (typeof typeVal !== typeof undefined && typeVal !== false) {
                 switch (typeVal) {
                     case "number":
+                        //TODO : Logic for min & max Length
+                        if ($.isNumeric(elementVal) === false) {
+                            errorList.push(new error(elementId, "Only numbers are allowed"));
+                        }
+                        break;
                     case "decimal":
                         if ($.isNumeric($(element).val().trim()) === false) {
-                            errorList.push(new error(elementId, "Only number allowed in " + elementCaption));
+                            errorList.push(new error(elementId, "Only numbers are allowed."));
                         }
                         break;
                     case "decimalonly":
@@ -103,19 +136,48 @@
                             }
                         }
                         break;
-                    case "stringonly":
-                        if (!_hasNumber($(element).val().trim())) {
-                            errorList.push(new error(elementId, "Numbers not allowed " + elementCaption));
+                    case "string":
+                        if (typeof elementMinLength != "undefined") {
+                            if (elementValLength < elementMinLength) {
+                                errorList.push(new error(elementId, "Minimum " + elementMinLength + " characters are required."));
+                            }
+                        }
+                        //TODO : Logic for max Length
+                        if (!_isString(elementVal)) {
+                            errorList.push(new error(elementId, "Only characters allowed"));
+                        }
+
+                        var elementFirstLetterCapital = $(element).data('jqv-first-letter-capital');
+                        if (typeof elementFirstLetterCapital != "undefined" && elementFirstLetterCapital == 'Y') {
+                            if (!(/^[A-Z]/.test(elementVal))) {
+                                errorList.push(new error(elementId, "First character should be capital"));
+                            }
                         }
                         break;
                     case "email":
-                        if (!_hasEmail($(element).val().trim())) {
-                            errorList.push(new error(elementId, "You have entered an invalid email address! " + elementCaption));
+                        if (!_isEmail(elementVal)) {
+                            errorList.push(new error(elementId, "Invalid email"));
                         }
                         break;
                     case "url":
-                        if (!_hasUrl($(element).val().trim())) {
+                        if (!_isUrl($(element).val().trim())) {
                             errorList.push(new error(elementId, "You have entered an invalid website address! " + elementCaption))
+                        }
+                        break;
+                    case "dob":
+                        var minDate = new Date();
+                        //Reduce 100 year from min date, as person with more than 100 years of age is not allowd
+                        minDate.setFullYear(minDate.getFullYear() - 100);
+
+                        var today = new Date();
+                        today.setFullYear(today.getFullYear() - 4);
+                        if (_isDate(elementVal)) {
+                            var DOB = Date.parse(elementVal);
+                            if ((DOB > today || DOB < minDate)) {
+                                errorList.push(new error(elementId, "Invalid " + elementCaption));
+                            }
+                        } else {
+                            errorList.push(new error(elementId, "Invalid date"));
                         }
                         break;
                 }
@@ -132,16 +194,17 @@
 
 
         // This variable will be accessible to the end user.
-        var _jqwObject = {
+        var _jqvObject = {
             validateForm: _validateForm,
             validateElement: _validateElement,
+            clean: _clearForm,
             version: '1.0',
         };
-        return _jqwObject;
+        return _jqvObject;
     }
 
-    // We need that our library is globally accesible, so we save in the window with name 'jqw'
-    if (typeof(window.jqw) === 'undefined') {
-        window.jqw = jqw();
+    // We need that our library is globally accesible, so we save in the window with name 'jqv'
+    if (typeof(window.jqv) === 'undefined') {
+        window.jqv = jqv();
     }
-})(window); // We send the window variable withing our functio()
+})(window); // We send the window variable withing our function()

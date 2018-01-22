@@ -26,41 +26,41 @@
             <div class="form-row">
                 <div class="col">
                     <label for="fname">First Name:</label>
-                    <input type="text" class="form-control " data-jqv-required='Y' id="fname" name="fname">
+                    <input type="text" class="form-control form-control-sm" id="fname" name="fname" data-jqv-required='Y' data-type="string" data-min="3" data-first-letter-capital='Y'>
                 </div>
                 <div class="col">
                     <label for="lname">Last Name:</label>
-                    <input type="text" class="form-control " data-jqv-required='Y' id="lname" name="lname">
+                    <input type="text" class="form-control form-control-sm" data-jqv-required='Y' id="lname" name="lname" data-type="string" data-min="3" data-first-letter-capital='Y'>
                 </div>
             </div>
             <div class="form-row">
                 <div class="col">
                     <label for="age">Age:</label>
-                    <input type="text" class="form-control " id="age" name="Age" data-jqv-type='number'>
+                    <input type="text" class="form-control form-control-sm" id="age" name="Age" data-jqv-type='number'>
                 </div>
                 <div class="col">
                     <label for="salary">Salary:</label>
-                    <input type="text" class="form-control " id="salary" name="salary" data-jqv-type='decimal'>
+                    <input type="text" class="form-control form-control-sm" id="salary" name="salary" data-jqv-type='decimal'>
                 </div>
             </div>
             <div class="form-row">
                 <div class="col">
                     <label for="email">Email:</label>
-                    <input type="email" class="form-control " id="email" name="email">
+                    <input type="email" class="form-control form-control-sm" id="email" name="email" data-type='email'>
                 </div>
                 <div class="col">
                     <label for="password">Password:</label>
-                    <input type="password" class="form-control " id="password" name="password">
+                    <input type="password" class="form-control form-control-sm" id="password" name="password">
                 </div>
             </div>
             <div class="form-row">
                 <div class="col">
                     <label for="Url">URL:</label>
-                    <input type="text" class="form-control " id="Url" name="Url" data-jqv-required='Y' data-jqv-type='url'>
+                    <input type="text" class="form-control form-control-sm" id="Url" name="Url" data-jqv-required='Y' data-jqv-type='url'>
                 </div>
                 <div class="col">
                     <label for="zip">Zip:</label>
-                    <input type="input" class="form-control " id="zip" name="zip">
+                    <input type="input" class="form-control form-control-sm" id="zip" name="zip">
                 </div>
             </div>
             <div class="form-group">
@@ -68,7 +68,11 @@
                         <input class="form-check-input" type="checkbox" name="remember"> Remember me
                    </label>
             </div>
-            <button type="button" id="btnSubmit" class="btn btn-primary">Submit</button>
+
+
+            <button type="button" id="btnSubmit" class="btn btn-primary btn-sm">Submit</button>
+            <button type="button" id="btnReset" class="btn btn-secondary btn-sm">Reset</button>
+
 
         </form>
 
@@ -76,7 +80,11 @@
     <script>
         $("#btnSubmit").click(function(e) {
             e.preventDefault();
-            jqw.validateForm('frm');
+            jqv.validateForm('frm');
+        });
+        $("#btnReset").click(function(e) {
+            e.preventDefault();
+            jqv.clean('frm');
         });
     </script>
 
